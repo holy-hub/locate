@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Autoriser la location {{ location.id }}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-floating my-4">
+                                <input name="utilisateur" value="{{ location.utilisateur.username }}" class="form-control" disabled><label for="utilisateur"></label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-floating my-4">
+                                <input name="propriete" value="{{ location.propriete.designation }}" class="form-control" disabled><label for="propriete"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-floating my-4">
+                                <input name="date_debut" value="{{ location.date_debut|y:m:d }}" class="form-control" disabled><label for="date_debut"></label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-floating my-4">
+                                <input name="date_fin" value="{{ location.date_fin|y:m:d }}" class="form-control" disabled><label for="date_fin"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-around">
+            <div class="row col-4">
+                <button class="btn btn-success" type="submit">Autoriser</button>
+            </div>
+            <div class="row col-4">
+                <a href="{% url 'read_user_properties' %}" class="btn btn-info">Mes Proprietes</a>
+            </div>
+        </div>
+    </form>
+{% endblock content %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container bg-light shadow my-3 p-2 rounded">
+    <div class="row d-flex flex-wrap">
+        {% for prop in proprietes %}
+        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+            <div class="card shadow">
+                <div class="card-header text-center"><a href="{% url 'update_propriete' prop.id %}" class="nav-link">{{ prop.designation }}</a></div>
+                <div class="card-body">
+                    <div class="card-title"><b>Proprietaire:</b> {{ prop.proprietaire.username }} - {{ user.last_name }}</div>
+                    <p class="card-text">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item list-group-item-action">
+                                <div class="d-flex flex-wrap">
+                                    <div class="w-50"><b>Nombre d'etage:</b></div><div class="w-50">{{ prop.nb_etage }}</div>
+                                </div>
+                            </li>
+                            <li class="list-group-item list-group-item-action">
+                                <div class="d-flex flex-wrap">
+                                    <div class="w-50"><b>Adresse:</b></div><div class="w-50">{{ prop.adresse }}</div>
+                                </div>
+                            </li>
+                            <li class="list-group-item list-group-item-action">
+                                <div class="d-flex flex-wrap">
+                                    <div class="w-50"><b>ville:</b></div><div class="w-50">{{ prop.ville }}</div>
+                                </div>
+                            </li>
+                            <li class="list-group-item list-group-item-action">
+                                <div class="d-flex flex-wrap">
+                                    <div class="w-50"><b>Code Postal:</b></div><div class="w-50">{{ prop.code_postal }}</div>
+                                </div>
+                            </li>
+                            <li class="list-group-item list-group-item-action">
+                                <div class="d-flex flex-wrap">
+                                    <div class="w-50"><b>Description:</b></div><div class="w-50">{{ prop.description }}</div>
+                                </div>
+                            </li>
+                            <li class="list-group-item list-group-item-action">
+                                <div class="d-flex flex-wrap">
+                                    <div class="w-50"><b>Nombre de Chambre:</b></div><div class="w-50">{{ prop.nb_chambre }}</div>
+                                </div>
+                            </li>
+                            <li class="list-group-item list-group-item-action">
+                                <div class="d-flex flex-wrap">
+                                    <div class="w-50"><b>Surface:</b></div><div class="w-50">{{ prop.surface }}Km<sup>2</sup></div>
+                                </div>
+                            </li>
+                            <li class="list-group-item list-group-item-action">
+                                <div class="d-flex flex-wrap">
+                                    <div class="w-50"><b>Montant:</b></div><div class="w-50">{{ prop.montant }}F</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </p>
+                    <div class="card-footer text-center m-auto row d-flex flex-column">
+                        <div class="col-12 row">
+                            {% if prop.locataire %}
+                            <b>Locataire:</b> {{ prop.locataire }}
+                            {% endif %}
+                        </div>
+                        <div class="my-3 row col-12"><a href="{% url 'update_propriete' prop.id %}" class="btn btn-info">Modifier</a></div>
+                        <div class="my-3 col-12 row"><a href="{% url 'delete_propriete' prop.id %}" class="btn btn-danger">Supprimer</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container bg-light">
+        <h1 class="text-align">Demande de location</h1>
+        <div class="row">
+            <form action="{% url 'demander_location' %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-floating"><input type="text" value="{{ nb_etage }}" name="nb_etage" class="form-control" disabled><label for="nb_etage"></label></div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-floating"><input type="text" value="{{ designation }}" name="designation" class="form-control" disabled><label for="designation"></label></div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-floating"><input type="text" value="{{ adresse }}" name="adresse" class="form-control" disabled><label for="adresse"></label></div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-floating"><input type="text" value="{{ ville }}" name="ville" class="form-control" disabled><label for="ville"></label></div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-floating"><input type="text" value="{{ code_postal }}" name="code_postal" class="form-control" disabled><label for="code_postal"></label></div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-floating"><input type="text" value="{{ description }}" name="description" class="form-control" disabled><label for="description"></label></div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-floating"><input type="text" value="{{ nb_chambre }}" name="nb_chambre" class="form-control" disabled><label for="nb_chambre"></label></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-floating"><input type="text" value="{{ surface }}" name="surface" class="form-control" disabled><label for="surface"></label></div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-floating"><input type="date" name="date_fin" class="form-control"><label for="date_fin"></label></div>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-around my-4">
+                    <div class="row col-4">
+                        <button class="btn btn-success" type="submit">Soumettre</button>
+                    </div>
+                    <div class="row col-4">
+                        <a href="{% read_user_properties %}" class="btn btn-info">Mes locations</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

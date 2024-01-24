@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container shadow rounded bg-light my-3">
+    <div class="row m-4">
+        <h1 class="text-center mt-3">Liste des derniers documents</h1>
+        <span class="badge rounded-pill bg-success">Total = {{ nb_doc }}</span>
+        <div class="row">
+            <div class="col-12 d-flex flex-wrap gap-2">
+            {% if documents %}
+                {% for doc in documents %}
+                <div class="col col-lg-4 col-md-6 col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-header text-info">{{ doc.titre }}</h2>
+                            <h4 class="card-title">{{ doc.utilisateur.username }}</h4>
+                            <p class="card-text">{{ doc.propriete.designation }}</p>
+                            <a href="{{ doc.fichier.url }}" class="btn btn-primary">{{ doc.fichier.name }}</a>
+                            <p class="card-text"> - </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <div class="alert alert-warning text-center m-auto my-4" role="alert">Aucun document trouvé pour cette recherche. Essayez une autre fois ou revenez</div>
+            {% endif %}
+            </div>
+        </div>
+    </div><hr class="p-4 my-3">
+    <div class="row m-4">
+        <h1 class="text-center">Liste des dernieres locations</h1>
+        <span class="badge rounded-pill bg-success">Total = {{ nb_loc }}</span>
+        <div class="row">
+            <div class="col-12 d-flex flex-wrap gap-2">
+            {% if locations %}
+                {% for loc in locations %}
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-header text-info">{{ loc.propriete }}</h2>
+                            <h4 class="card-title">{{ loc.utilisateur.username }}</h4>
+                            <p class="card-text">{{ loc.date_debut }} - {{ loc.date_fin }}</p>
+                            <p class="card-text"> - </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-warning text-center m-auto my-4" role="alert">Aucune location enregistree</div>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="row m-4">
+        <div class="col"></div>
+    </div>
+</div>
+{% endblock content %}
