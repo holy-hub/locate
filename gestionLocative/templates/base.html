@@ -1,0 +1,42 @@
+{% extends "link.html" %}
+
+{% block body %}
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-3">
+    <div class="col d-flex justify-content-around m-auto">
+        <a class="navbar-brand" href="{% url 'dashboard' %}"><h1>solulocate</h1></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+
+    <div class="col collapse navbar-collapse text-center" id="navbarSupportedContent">
+        <ul class="navbar-nav nav nav-tabs d-flex flex-wrap m-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'liste_locations' %}">Mes locations</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'read_user_properties' %}">Mes propriétés</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'create_propriete' request.user.id %}">Ajouter une propriété</a>
+            </li>
+            <div class="nav-item active p-2 m-auto">
+                <div class="input-group">
+                    <div class="input-group-text">
+                        <i class="fa fa-registered"></i>
+                    </div>
+                    <a href="{% url 'deconnexion' %}" class="btn btn-info text-light">Déconnexion</a>
+                </div>
+            </div>
+        </ul>
+    </div>
+</nav>
+<div class="container bg-info shadow rounded p-2 mb-3">
+    <div class="letter-spacing mb-2">
+        <h1 class="text-center">{{ title|upper }}</h1>
+    </div>
+    {% block content %}{% endblock content %}
+</div>
+<footer></footer>
+{% endblock body %}

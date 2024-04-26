@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container shadow rounded bg-light my-3">
+    <div class="row m-4">
+        <h1 class="text-center mt-3">Liste des derniers documents</h1>
+        <span class="badge rounded-pill bg-success">Total = {{ nb_doc }}</span>
+        <div class="row">
+            <div class="col-12 d-flex flex-wrap gap-2 justify-content-stretch">
+                {% if documents %}
+                {% for doc in documents %}
+                <div class="col col-lg-4 col-md-6 col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-header text-info">{{ doc.titre }}</h2>
+                            <h4 class="card-title">{{ doc.utilisateur.username }}</h4>
+                            <p class="card-text">{{ doc.propriete.designation }}</p>
+                            <a href="{{ doc.fichier.url }}" class="btn btn-primary">{{ doc.fichier.name }}</a>
+                            <p class="card-text"> - </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="alert alert-warning text-center m-auto my-4" role="alert">Aucun document trouvé pour cette
+                    recherche. Essayez une autre fois ou revenez</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <hr class="p-4 my-3">
+    <div class="row m-4">
+        <h1 class="text-center">Liste des dernieres locations</h1>
+        <span class="badge rounded-pill bg-success">Total = {{ nb_loc }}</span>
+        <div class="row">
+            <div class="col-12 d-flex flex-wrap gap-2 justify-content-stretch">
+                {% if locations %}
+                {% for loc in locations %}
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-header text-info">{{ loc.propriete }}</h2>
+                            <h4 class="card-title">{{ loc.utilisateur.username }}</h4>
+                            <p class="card-text">{{ loc.date_debut }} - {{ loc.date_fin }}</p>
+                            <p class="card-text"> - </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="alert alert-warning text-center m-auto my-4" role="alert">Aucune location enregistree</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row m-4">
+    <div class="col"></div>
+</div>
+<div class="container shadow rounded my-3 p-2 bg-secondary">
+    <div class="row">
+        <h1 class="text-center">PROPRIETE DISPONIBLE</h1>
+        <div class="row d-flex flex-wrap">
+            {% for prop in proprietes %}
+            <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+                <div class="card shadow h-100">
+                    <div class="card-header bg-dark text-center text-warning"><a href="{% url 'update_propriete' prop.id %}" class="nav-link"><h3>{{ prop.designation|upper }}</h3></a></div>
+                    <div class="card-body bg-info">
+                        <div class="card-title"><b>Proprietaire:</b> {{ prop.proprietaire.username }} - {{ user.last_name }}</div>
+                        <p class="card-text">
+                            <ul class="list-group list-group-flush rounded">
+                                <li class="list-group-item list-group-item-action">
+                                    <div class="d-flex flex-wrap">
+                                        <div class="w-50"><b>Nombre d'etage:</b></div><div class="w-50">{{ prop.nb_etage }}</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item list-group-item-action">
+                                    <div class="d-flex flex-wrap">
+                                        <div class="w-50"><b>Adresse:</b></div><div class="w-50">{{ prop.adresse }}</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item list-group-item-action">
+                                    <div class="d-flex flex-wrap">
+                                        <div class="w-50"><b>ville:</b></div><div class="w-50">{{ prop.ville }}</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item list-group-item-action">
+                                    <div class="d-flex flex-wrap">
+                                        <div class="w-50"><b>Code Postal:</b></div><div class="w-50">{{ prop.code_postal }}</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item list-group-item-action">
+                                    <div class="d-flex flex-wrap">
+                                        <div class="w-50"><b>Description:</b></div><div class="w-50">{{ prop.description }}</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item list-group-item-action">
+                                    <div class="d-flex flex-wrap">
+                                        <div class="w-50"><b>Nombre de Chambre:</b></div><div class="w-50">{{ prop.nb_chambre }}</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item list-group-item-action">
+                                    <div class="d-flex flex-wrap">
+                                        <div class="w-50"><b>Surface:</b></div><div class="w-50">{{ prop.surface }}Km<sup>2</sup></div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item list-group-item-action">
+                                    <div class="d-flex flex-wrap">
+                                        <div class="w-50"><b>Montant:</b></div><div class="w-50">{{ prop.montant }}F</div>
+                                    </div>
+                                </li>
+                                {% if prop.locataire %}
+                                <li class="list-group-item list-group-item-action">
+                                    <div class="d-flex flex-wrap">
+                                        <div class="w-50"><b>Locataire:</b></div><div class="w-50">{{ prop.locataire.username }}F</div>
+                                    </div>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </p>
+                        <div class="card-footer text-center">
+                            <div class="row col-12 m-auto"><a href="{% url 'demander_location' prop.id %}" class="btn btn-primary"> faire un demande de location</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="row col text-center bg-light rounded-pill  m-2 p-2" style="font-family: courrier new;">
+                <p class="pt-2">--- Aucune propriete disponible ! ---</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</div>
+{% endblock content %}

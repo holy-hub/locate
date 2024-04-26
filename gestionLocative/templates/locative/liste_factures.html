@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container shadow bg-light">
+    <div class="row m-auto">
+        <h1 class="text-center">Liste des factures</h1>
+        <ul class="list-group">
+            {% for facture in factures %}
+                <li class="list-group-item list-group-item-action">{{ facture.id }} - {{ facture.montant }}</li>
+            {% empty %}
+                <li class="list-group-item list-group-item-action">Aucune facture disponible.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock content %}

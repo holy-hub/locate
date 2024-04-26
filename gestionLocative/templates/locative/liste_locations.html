@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Liste des locations</h1>
+    <ul>
+        {% for location in locations %}
+            <li>{{ location.id }} - {{ location.date_debut }} à {{ location.date_fin }}</li>
+        {% empty %}
+            <li>Aucune location disponible.</li>
+        {% endfor %}
+    </ul>
+{% endblock content %}

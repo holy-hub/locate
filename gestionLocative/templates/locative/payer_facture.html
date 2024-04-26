@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Payer la facture {{ location.utilisateur.username }}</h1>
+    <form method="POST" action="{% url 'payer_facture' %}">
+        {% csrf_token %}
+        <div class="row my-3">
+            <div class="col-12 d-flex justify-content-center flex-wrap gap-2">
+                <div class="col my-4">
+                    <div class="form-floating">
+                        <input type="text" value="{{ location.utilisateur.username}}" name="username" class="form-control" disabled><label for="username">Future Proprietaire</label>
+                    </div>
+                </div>
+                <div class="col my-4">
+                    <div class="form-floating">
+                        <input type="text" value="{{ location.propriete.designation }}" name="propriete" class="form-control" disabled><label for="propriete">Propriete</label>
+                    </div>
+                </div>
+                <div class="col my-4">
+                    <div class="form-floating">
+                        <input type="number" name="montant" class="form-control" placeholder="{{ location.propriete.montant }} F"><label for="montant">Montant</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-success border-right-light" type="submit">Payer</button>
+    </form>
+{% endblock content %}

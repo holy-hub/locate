@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container bg-light rounded">
+        <div class="row my-4 p-2 rounded-pill border border-2">
+            <form action="{% url 'demander_location' propriete.id %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+                        <div class="form-floating"><input type="text" value="{{ propriete.nb_etage }}" id="nb_etage" name="nb_etage" class="form-control" disabled><label for="nb_etage">Nombre d'etage</label></div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+                        <div class="form-floating"><input type="text" value="{{ propriete.designation }}" id="designation" name="designation" class="form-control" disabled><label for="designation">Designation</label></div>
+                    </div>
+                    <div class="col-lg-4 col-md-12 col-sm-12 my-3">
+                        <div class="form-floating"><input type="text" value="{{ propriete.adresse }}" id="adresse" name="adresse" class="form-control" disabled><label for="adresse">Adresse</label></div>
+                    </div>
+                </div>
+                <div class="col-12 my-3">
+                    <div class="form-floating"><input type="text" value="{{ propriete.ville }}" id="ville" name="ville" class="form-control" disabled><label for="ville">Ville</label></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+                        <div class="form-floating"><input type="text" value="{{ propriete.code_postal }}" id="code_postal" name="code_postal" class="form-control" disabled><label for="code_postal">Code Postal</label></div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 my-3">
+                        <div class="form-floating"><input type="text" value="{{ propriete.description }}" id="description" name="description" class="form-control" disabled><label for="description">Description</label></div>
+                    </div>
+                    <div class="col-lg-4 col-md-12 col-sm-12 my-3">
+                        <div class="form-floating"><input type="text" value="{{ propriete.nb_chambre }}" id="nb_chambre" name="nb_chambre" class="form-control" disabled><label for="nb_chambre">Nombre Chambre</label></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-12 my-3">
+                        <div class="form-floating"><input type="text" value="{{ propriete.surface }}" id="surface" name="surface" class="form-control" disabled><label for="surface">Surface</label></div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12 my-3">
+                        <div class="form-floating"><input type="date" id="date_fin" name="date_fin" class="form-control"><label for="date_fin">Echeancier de location</label></div>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-around my-4">
+                    <div class="row col-5">
+                        <button class="btn btn-success" type="submit">Soumettre</button>
+                    </div>
+                    <div class="row col-5 text-light">
+                        <a href="{% url 'read_user_properties' %}" class="btn btn-info">Mes locations</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

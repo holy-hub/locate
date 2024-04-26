@@ -1,0 +1,56 @@
+{% extends "link.html" %}
+{% block body %}
+{% load static %}
+<div class="container rounded bg-light my-4 p-4">
+    <div class="letter-spacing"><h1 class="text-center">{{ title|upper }}</h1></div><hr>
+    <div class="row d-flex align-items-center">
+        <div class="col-lg-6 col-md-6 col-sm-12 p-4">
+            <img src="{% static "img/signUp.png" %}" alt="S'inscrire" title="Inscription" class="img rounded img-thumbnail">
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 p-4">
+            <form action="{% url 'inscription' %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-6 my-4">
+                        <div class="form-floating">
+                            <input type="text" name="username" min="4" class="form-control" required><label for="username">Username</label>
+                        </div>
+                    </div>
+                    <div class="col-6 my-4">
+                        <div class="form-floating">
+                            <input type="password" name="password" min="8" class="form-control" required><label for="password">Password</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col my-4">
+                    <div class="form-floating">
+                        <input type="email" name="email" min="13" class="form-control" required><label for="email">Email</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 my-4">
+                        <div class="form-floating">
+                            <input type="text" name="first_name" min="3" class="form-control" required><label for="first_name">First Name</label>
+                        </div>
+                    </div>
+                    <div class="col-6 my-4">
+                        <div class="form-floating">
+                            <input type="text" name="last_name" min="3" class="form-control" required><label for="last_name">Last Name</label>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="row my-4 d-flex justify-content-center gap-4">
+                    <div class="col-6 row">
+                        <a href="{% url 'connexion' %}" class="btn btn-info text-light" type="submit">Se connecter</a>
+                    </div>
+                    <div class="col-6 row float-right">
+                        <button class="btn btn-primary" type="submit">S'inscrire</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}
