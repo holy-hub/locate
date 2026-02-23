@@ -1,70 +1,46 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container bg-light shadow my-3 p-2 rounded">
+<div class="container bg-light shadow my-3 p-4 rounded section-fade">
+    <h1 class="mb-4">{{ title }}</h1>
+    {% if locations_en_attente %}
+    <div class="alert alert-info mb-4">
+        <h3>Demandes de location en attente</h3>
+        <ul class="list-group">
+            {% for loc in locations_en_attente %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ loc.propriete.designation }} — {{ loc.utilisateur.username }} ({{ loc.date_debut|date:"d/m/Y" }} - {{ loc.date_fin|date:"d/m/Y" }})
+                <a href="{% url 'autoriser_location' loc.id %}" class="btn btn-sm btn-immobilier">Autoriser / Refuser</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
     <div class="row d-flex flex-wrap">
         {% for prop in proprietes %}
-        <div class="col-lg-4 col-md-6 col-sm-12 my-3">
-            <div class="card shadow">
-                <div class="card-header text-center"><a href="{% url 'update_propriete' prop.id %}" class="nav-link">{{ prop.designation }}</a></div>
+        <div class="col-lg-4 col-md-6 col-sm-12 my-3 fade-in">
+            <div class="card card-immobilier shadow">
+                <div class="card-header text-center"><a href="{% url 'read_propriete' prop.id %}" class="nav-link">{{ prop.designation }}</a></div>
                 <div class="card-body">
-                    <div class="card-title"><b>Proprietaire:</b> {{ prop.proprietaire.username }} - {{ user.last_name }}</div>
-                    <p class="card-text">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item list-group-item-action">
-                                <div class="d-flex flex-wrap">
-                                    <div class="w-50"><b>Nombre d'etage:</b></div><div class="w-50">{{ prop.nb_etage }}</div>
-                                </div>
-                            </li>
-                            <li class="list-group-item list-group-item-action">
-                                <div class="d-flex flex-wrap">
-                                    <div class="w-50"><b>Adresse:</b></div><div class="w-50">{{ prop.adresse }}</div>
-                                </div>
-                            </li>
-                            <li class="list-group-item list-group-item-action">
-                                <div class="d-flex flex-wrap">
-                                    <div class="w-50"><b>ville:</b></div><div class="w-50">{{ prop.ville }}</div>
-                                </div>
-                            </li>
-                            <li class="list-group-item list-group-item-action">
-                                <div class="d-flex flex-wrap">
-                                    <div class="w-50"><b>Code Postal:</b></div><div class="w-50">{{ prop.code_postal }}</div>
-                                </div>
-                            </li>
-                            <li class="list-group-item list-group-item-action">
-                                <div class="d-flex flex-wrap">
-                                    <div class="w-50"><b>Description:</b></div><div class="w-50">{{ prop.description }}</div>
-                                </div>
-                            </li>
-                            <li class="list-group-item list-group-item-action">
-                                <div class="d-flex flex-wrap">
-                                    <div class="w-50"><b>Nombre de Chambre:</b></div><div class="w-50">{{ prop.nb_chambre }}</div>
-                                </div>
-                            </li>
-                            <li class="list-group-item list-group-item-action">
-                                <div class="d-flex flex-wrap">
-                                    <div class="w-50"><b>Surface:</b></div><div class="w-50">{{ prop.surface }}Km<sup>2</sup></div>
-                                </div>
-                            </li>
-                            <li class="list-group-item list-group-item-action">
-                                <div class="d-flex flex-wrap">
-                                    <div class="w-50"><b>Montant:</b></div><div class="w-50">{{ prop.montant }}F</div>
-                                </div>
-                            </li>
-                        </ul>
-                    </p>
-                    <div class="card-footer text-center  m-auto row d-flex flex-column">
-                        <div class="col-12 row">
-                            {% if prop.locataire %}
-                            <b>Locataire:</b> {{ prop.locataire }}
-                            {% endif %}
-                        </div>
-                        <div class="my-3 row col-12"><a href="{% url 'update_propriete' prop.id %}" class="btn btn-info">Modifier</a></div>
-                        <div class="my-3 col-12 row"><a href="{% url 'delete_propriete' prop.id %}" class="btn btn-danger">Supprimer</a></div>
+                    <p class="card-title"><b>Type :</b> {{ prop.get_type_propriete_display }} — <b>Statut :</b> {{ prop.get_statut_display }}</p>
+                    <p class="card-text">{{ prop.adresse }}, {{ prop.code_postal }} {{ prop.ville }}</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>Chambres :</b> {{ prop.nb_chambre }} — <b>Surface :</b> {{ prop.surface }} m²</li>
+                        <li class="list-group-item"><b>Loyer :</b> {{ prop.loyer_total }} F/mois</li>
+                        {% if prop.locataire %}<li class="list-group-item"><b>Locataire :</b> {{ prop.locataire.username }}</li>{% endif %}
+                    </ul>
+                    <div class="card-footer text-center m-auto row d-flex flex-column mt-2">
+                        <div class="my-2"><a href="{% url 'read_propriete' prop.id %}" class="btn btn-outline-primary btn-sm w-100">Voir</a></div>
+                        <div class="my-2"><a href="{% url 'update_propriete' prop.id %}" class="btn btn-immobilier w-100">Modifier</a></div>
+                        <div class="my-2"><a href="{% url 'gerer_documents' prop.id %}" class="btn btn-info w-100">Documents</a></div>
+                        {% if prop.locataire %}<div class="my-2"><a href="{% url 'creer_intervention' prop.id %}" class="btn btn-outline-secondary btn-sm w-100">Intervention</a></div>{% endif %}
+                        <div class="my-2"><a href="{% url 'delete_propriete' prop.id %}" class="btn btn-danger w-100" onclick="return confirm('Supprimer cette propriété ?');">Supprimer</a></div>
                     </div>
                 </div>
             </div>
         </div>
+        {% empty %}
+        <div class="col-12 alert alert-light text-center">Vous n'avez pas encore de propriété. <a href="{% url 'create_propriete' user.id %}">Ajouter une propriété</a></div>
         {% endfor %}
     </div>
 </div>

@@ -1,54 +1,79 @@
 {% extends "link.html" %}
-{% block body %}
 {% load static %}
-<div class="container rounded bg-light my-4 p-4">
-    <div class="letter-spacing"><h1 class="text-center">{{ title|upper }}</h1></div><hr>
-    <div class="row d-flex align-items-center">
-        <div class="col-lg-6 col-md-6 col-sm-12 p-4">
-            <img src="{% static "img/signUp.png" %}" alt="S'inscrire" title="Inscription" class="img rounded img-thumbnail">
+{% block body %}
+<header>
+    <nav class="z-3 fixed-top navbar navbar-expand-lg navbar-dark navbar-immobilier px-4">
+        <div class="container-fluid d-flex align-items-center">
+            <a class="navbar-brand" href="{% url 'accueil' %}"><h1 class="mb-0">Solulocate</h1></a>
+
+            <div class="d-flex">
+                <a href="{% url 'connexion' %}" class="btn btn-gold">Connexion</a>
+            </div>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-12 p-4">
-            <form action="{% url 'inscription' %}" method="post">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-6 my-4">
-                        <div class="form-floating">
-                            <input type="text" name="username" min="4" class="form-control" required><label for="username">Username</label>
+    </nav>
+</header>
+
+<div class="justify-align">
+    <div class="container main-container rounded my-4 p-4">
+        <div class="letter-spacing"><h1 class="text-center page-title">{{ title|upper }}</h1></div><hr>
+        <div class="row d-flex align-items-center">
+            <div class="col-lg-6 col-md-6 col-sm-12 p-4 fade-in">
+                <img src="{% static 'img/signUp.png' %}" alt="S'inscrire" title="Inscription" class="img-fluid rounded img-thumbnail">
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 p-4 fade-in stagger-2">
+                <form action="{% url 'inscription' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-6 my-4">
+                            <div class="form-floating">
+                                <input type="text" name="username" min="4" class="form-control" required><label for="username">Username</label>
+                            </div>
+                        </div>
+                        <div class="col-6 my-4">
+                            <div class="form-floating">
+                                <input type="password" name="password" min="8" class="form-control" required><label for="password">Password</label>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-6 my-4">
+                    <div class="col my-4">
                         <div class="form-floating">
-                            <input type="password" name="password" min="8" class="form-control" required><label for="password">Password</label>
+                            <input type="email" name="email" min="13" class="form-control" required><label for="email">Email</label>
                         </div>
                     </div>
-                </div>
-                <div class="col my-4">
-                    <div class="form-floating">
-                        <input type="email" name="email" min="13" class="form-control" required><label for="email">Email</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6 my-4">
-                        <div class="form-floating">
-                            <input type="text" name="first_name" min="3" class="form-control" required><label for="first_name">First Name</label>
+                    <div class="row">
+                        <div class="col-6 my-4">
+                            <div class="form-floating">
+                                <input type="text" name="first_name" min="3" class="form-control" required><label for="first_name">First Name</label>
+                            </div>
+                        </div>
+                        <div class="col-6 my-4">
+                            <div class="form-floating">
+                                <input type="text" name="last_name" min="3" class="form-control" required><label for="last_name">Last Name</label>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-6 my-4">
-                        <div class="form-floating">
-                            <input type="text" name="last_name" min="3" class="form-control" required><label for="last_name">Last Name</label>
+                    <div class="col my-4">
+                        <label class="form-label d-flex justify-content-center">Je suis</label>
+                        <div class="d-flex gap-3 justify-content-center">
+                            {% for value, label in role_choices %}
+                            <div class="form-check">
+                                <input type="radio" name="role" id="role_{{ value }}" value="{{ value }}" class="form-check-input" {% if forloop.first %}checked{% endif %}>
+                                <label class="form-check-label" for="role_{{ value }}">{{ label }}</label>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
-                </div>
-    
-                <div class="row my-4 d-flex justify-content-center gap-4">
-                    <div class="col-6 row">
-                        <a href="{% url 'connexion' %}" class="btn btn-info text-light" type="submit">Se connecter</a>
+        
+                    <div class="row my-4 d-flex justify-content-center gap-4">
+                        <div class="col-6 row">
+                            <a href="{% url 'connexion' %}" class="btn btn-gold">Se connecter</a>
+                        </div>
+                        <div class="col-6 row float-right">
+                            <button class="btn btn-immobilier" type="submit">S'inscrire</button>
+                        </div>
                     </div>
-                    <div class="col-6 row float-right">
-                        <button class="btn btn-primary" type="submit">S'inscrire</button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </div>

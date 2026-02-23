@@ -3,39 +3,61 @@
 {% block content %}
 <div class="container bg-light shadow rounded">
     <div class="row">
-        <form action="{% url 'create_propriete' request.user.id %}" method="post">
+        <form action="{% url 'create_propriete' request.user.id %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row my-4">
                 <div class="col-lg-4 col-md-6 my-3 col-sm-12">
-                    <div class="form-floating"><input type="number" name="nb_etage" class="form-control"><label for="nb_etage">Nombre d'etage</label></div>
+                    <div class="form-floating"><input type="text" name="nb_etage" class="form-control" placeholder="Ex. 2"><label for="nb_etage">Étage / Nombre d'étages</label></div>
                 </div>
                 <div class="col-lg-4 col-md-6 my-3 col-sm-12">
-                    <div class="form-floating"><input type="text" name="designation" class="form-control"><label for="designation">Designation</label></div>
+                    <div class="form-floating"><input type="text" name="designation" class="form-control" placeholder="Home"><label for="designation">Designation</label></div>
                 </div>
                 <div class="col-lg-4 col-md-12 my-3">
-                    <div class="form-floating"><input type="text" name="adresse" class="form-control"><label for="adresse">Adresse</label></div>
+                    <div class="form-floating"><input type="text" name="adresse" class="form-control" placeholder="Home"><label for="adresse">Adresse</label></div>
                 </div>
             </div>
             <div class="col">
-                <div class="form-floating"><input type="text" name="ville" class="form-control"><label for="ville">Ville</label></div>
+                <div class="form-floating"><input type="text" name="ville" class="form-control" placeholder="Home"><label for="ville">Ville</label></div>
             </div>
             <div class="row my-4">
                 <div class="col-lg-4 my-3 col-md-12 col-sm-12">
-                    <div class="form-floating"><input type="text" name="code_postal" class="form-control"><label for="code_postal">Code Postal</label></div>
+                    <div class="form-floating"><input type="text" name="code_postal" class="form-control" placeholder="Home"><label for="code_postal">Code Postal</label></div>
                 </div>
                 <div class="col-lg-4 my-3 col-md-6 col-sm-12">
-                    <div class="form-floating"><input type="text" name="description" class="form-control"><label for="description">Description</label></div>
+                    <div class="form-floating"><input type="text" name="description" class="form-control" placeholder="Home"><label for="description">Description</label></div>
                 </div>
                 <div class="col-lg-4 my-3 col-md-6 col-sm-12">
-                    <div class="form-floating"><input type="number" name="nb_chambre" class="form-control"><label for="nb_chambre">Nombre Chambre</label></div>
+                    <div class="form-floating"><input type="number" name="nb_chambre" class="form-control" placeholder="Home"><label for="nb_chambre">Nombre Chambre</label></div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-6">
-                    <div class="form-floating"><input type="number" name="surface" class="form-control"><label for="surface">Surface</label></div>
+                <div class="col-md-6 my-3">
+                    <label for="type_propriete" class="form-label">Type de propriété</label>
+                    <select name="type_propriete" id="type_propriete" class="form-select">
+                        {% for value, label in type_propriete_choices %}
+                        <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
-                <div class="col-6">
-                    <div class="form-floating"><input type="number" name="montant" class="form-control"><label for="montant">Montant</label></div>
+                <div class="col-md-6 my-3">
+                    <label for="statut_propriete" class="form-label">Statut de propriété</label>
+                    <select name="statut_propriete" id="statut_propriete" class="form-select">
+                        {% for value, label in statut_propriete_choices %}
+                        <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-floating"><input type="number" name="surface" class="form-control" placeholder="0" step="0.01"><label for="surface">Surface (m²)</label></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-floating"><input type="number" name="montant" class="form-control" placeholder="0" step="50"><label for="montant">Loyer mensuel (F)</label></div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Photo (optionnel)</label>
+                    <input type="file" name="photo" class="form-control" accept="image/*">
                 </div>
             </div>
             <div class="row d-flex justify-content-around my-4">
@@ -43,7 +65,7 @@
                     <button class="btn btn-success" type="submit">Creer</button>
                 </div>
                 <div class="row col-4">
-                    <a href="{% url 'read_user_properties' %}" class="btn btn-info">Mes locations</a>
+                    <button class="btn btn-info" type="reset">Reinitialiser</button>
                 </div>
             </div>
         </form>

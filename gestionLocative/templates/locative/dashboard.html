@@ -1,136 +1,102 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container shadow rounded bg-light my-3">
-    <div class="row m-4">
-        <h1 class="text-center mt-3">Liste des derniers documents</h1>
-        <span class="badge rounded-pill bg-success">Total = {{ nb_doc }}</span>
-        <div class="row">
-            <div class="col-12 d-flex flex-wrap gap-2 justify-content-stretch">
-                {% if documents %}
-                {% for doc in documents %}
-                <div class="col col-lg-4 col-md-6 col-sm-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h2 class="card-header text-info">{{ doc.titre }}</h2>
-                            <h4 class="card-title">{{ doc.utilisateur.username }}</h4>
-                            <p class="card-text">{{ doc.propriete.designation }}</p>
-                            <a href="{{ doc.fichier.url }}" class="btn btn-primary">{{ doc.fichier.name }}</a>
-                            <p class="card-text"> - </p>
-                        </div>
-                    </div>
+<div class="container shadow rounded bg-light my-3 section-fade">
+    <h1 class="text-center page-title mb-4">{{ title }}</h1>
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card card-immobilier">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Mes propriétés</h5>
+                    <p class="display-6">{{ nb_proprietes }}</p>
                 </div>
-                {% endfor %}
-                {% else %}
-                <div class="alert alert-warning text-center m-auto my-4" role="alert">Aucun document trouvé pour cette
-                    recherche. Essayez une autre fois ou revenez</div>
-                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-immobilier">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Locations actives</h5>
+                    <p class="display-6">{{ nb_locations_actives }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-immobilier">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Revenus du mois</h5>
+                    <p class="display-6">{{ revenus_mois }} F</p>
+                </div>
             </div>
         </div>
     </div>
-    <hr class="p-4 my-3">
+    <hr class="my-4">
     <div class="row m-4">
-        <h1 class="text-center">Liste des dernieres locations</h1>
-        <span class="badge rounded-pill bg-success">Total = {{ nb_loc }}</span>
-        <div class="row">
-            <div class="col-12 d-flex flex-wrap gap-2 justify-content-stretch">
-                {% if locations %}
-                {% for loc in locations %}
-                <div class="col-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h2 class="card-header text-info">{{ loc.propriete }}</h2>
-                            <h4 class="card-title">{{ loc.utilisateur.username }}</h4>
-                            <p class="card-text">{{ loc.date_debut }} - {{ loc.date_fin }}</p>
-                            <p class="card-text"> - </p>
-                        </div>
+        <h2 class="page-title">Derniers documents</h2>
+        <span class="badge bg-secondary my-3">Total = {{ nb_doc }}</span>
+        <div class="col-12 d-flex flex-wrap gap-2 justify-content-stretch">
+            {% for doc in documents %}
+            <div class="col col-lg-4 col-md-6 col-sm-12 fade-in">
+                <div class="card card-immobilier">
+                    <div class="card-body">
+                        <h5 class="card-title text-info">{{ doc.titre }}</h5>
+                        <p class="card-text">{% if doc.propriete %}{{ doc.propriete.designation }}{% endif %}</p>
+                        <a href="{{ doc.fichier.url }}" class="btn btn-immobilier btn-sm" target="_blank" download>Télécharger</a>
                     </div>
                 </div>
-                {% endfor %}
-                {% else %}
-                <div class="alert alert-warning text-center m-auto my-4" role="alert">Aucune location enregistree</div>
-                {% endif %}
             </div>
+            {% empty %}
+            <p class="alert alert-warning text-center">Aucun document.</p>
+            {% endfor %}
         </div>
     </div>
-</div>
-<div class="row m-4">
-    <div class="col"></div>
-</div>
-<div class="container shadow rounded my-3 p-2 bg-secondary">
-    <div class="row">
-        <h1 class="text-center">PROPRIETE DISPONIBLE</h1>
+    <hr class="my-4">
+    <div class="row m-4 section-fade">
+        <h2 class="page-title">Dernières locations</h2>
+        <span class="badge bg-secondary my-3">Total = {{ nb_loc }}</span>
+        <div class="col-12 d-flex flex-wrap gap-2">
+            {% for loc in locations %}
+            <div class="col-12 col-md-6 col-lg-4 fade-in">
+                <div class="card card-immobilier">
+                    <div class="card-body">
+                        {% if loc.propriete %}<h5 class="card-title text-info">{{ loc.propriete.designation }}</h5>{% endif %}
+                        <p class="card-text">{{ loc.get_statut_display }}</p>
+                        <p class="card-text small">{{ loc.date_debut|date:"d/m/Y" }} — {{ loc.date_fin|date:"d/m/Y" }}</p>
+                        {% if loc.est_autorisee %}<a href="{% url 'payer_facture' loc.id %}" class="btn btn-immobilier btn-sm">Payer loyer</a>{% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="alert alert-warning text-center m-auto">Aucune location.</p>
+            {% endfor %}
+        </div>
+    </div>
+    <hr class="my-4">
+    <div class="container shadow rounded my-3 p-4 section-fade">
+        <h2 class="text-center page-title mb-4">Propriétés disponibles à louer</h2>
         <div class="row d-flex flex-wrap">
             {% for prop in proprietes %}
-            <div class="col-lg-4 col-md-6 col-sm-12 my-3">
-                <div class="card shadow h-100">
-                    <div class="card-header bg-dark text-center text-warning"><a href="{% url 'update_propriete' prop.id %}" class="nav-link"><h3>{{ prop.designation|upper }}</h3></a></div>
-                    <div class="card-body bg-info">
-                        <div class="card-title"><b>Proprietaire:</b> {{ prop.proprietaire.username }} - {{ user.last_name }}</div>
-                        <p class="card-text">
-                            <ul class="list-group list-group-flush rounded">
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="w-50"><b>Nombre d'etage:</b></div><div class="w-50">{{ prop.nb_etage }}</div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="w-50"><b>Adresse:</b></div><div class="w-50">{{ prop.adresse }}</div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="w-50"><b>ville:</b></div><div class="w-50">{{ prop.ville }}</div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="w-50"><b>Code Postal:</b></div><div class="w-50">{{ prop.code_postal }}</div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="w-50"><b>Description:</b></div><div class="w-50">{{ prop.description }}</div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="w-50"><b>Nombre de Chambre:</b></div><div class="w-50">{{ prop.nb_chambre }}</div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="w-50"><b>Surface:</b></div><div class="w-50">{{ prop.surface }}Km<sup>2</sup></div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="w-50"><b>Montant:</b></div><div class="w-50">{{ prop.montant }}F</div>
-                                    </div>
-                                </li>
-                                {% if prop.locataire %}
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="w-50"><b>Locataire:</b></div><div class="w-50">{{ prop.locataire.username }}F</div>
-                                    </div>
-                                </li>
-                                {% endif %}
-                            </ul>
-                        </p>
+            <div class="col-lg-4 col-md-6 col-sm-12 my-3 fade-in">
+                <div class="card card-immobilier shadow h-100">
+                    <div class="card-header text-center">
+                        <a href="{% url 'demander_location' prop.id %}" class="nav-link"><h3 class="h5 mb-0">{{ prop.designation|upper }}</h3></a>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-title"><b>Type :</b> {{ prop.get_type_propriete_display }}</p>
+                        {% if prop.proprietaire %}<p class="card-title"><b>Propriétaire :</b> {{ prop.proprietaire.username }}</p>{% endif %}
+                        <p class="card-text">{{ prop.ville }} — {{ prop.nb_chambre }} chambre(s) — {{ prop.surface }} m²</p>
+                        <p class="card-text"><b>Loyer :</b> {{ prop.loyer_total }} F/mois</p>
                         <div class="card-footer text-center">
-                            <div class="row col-12 m-auto"><a href="{% url 'demander_location' prop.id %}" class="btn btn-primary"> faire un demande de location</a></div>
+                            <a href="{% url 'demander_location' prop.id %}" class="btn btn-immobilier">Demander une location</a>
                         </div>
                     </div>
                 </div>
             </div>
             {% empty %}
-            <div class="row col text-center bg-light rounded-pill  m-2 p-2" style="font-family: courrier new;">
-                <p class="pt-2">--- Aucune propriete disponible ! ---</p>
+            <div class="col-12 text-center alert alert-light rounded-3 mx-auto my-2 p-4">
+                <p class="pt-2 mb-0">Aucune propriété disponible.</p>
             </div>
             {% endfor %}
         </div>
     </div>
-</div>
 </div>
 {% endblock content %}

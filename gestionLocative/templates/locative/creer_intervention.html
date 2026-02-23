@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container bg-light shadow rounded my-3 p-4">
+    <h1 class="mb-4">{{ title }}</h1>
+    <p>Bien : <strong>{{ propriete.designation }}</strong> — {{ propriete.adresse }}, {{ propriete.ville }}</p>
+    <form method="post" action="{% url 'creer_intervention' propriete.id %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="titre" class="form-label">Titre</label>
+            <input type="text" name="titre" id="titre" class="form-control" required placeholder="Ex. Fuite salle de bain">
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="description" id="description" class="form-control" rows="4" required placeholder="Décrivez le problème..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Envoyer la demande</button>
+        <a href="{% url 'liste_interventions' %}" class="btn btn-outline-secondary">Annuler</a>
+    </form>
+</div>
+{% endblock content %}

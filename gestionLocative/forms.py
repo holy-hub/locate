@@ -1,32 +1,54 @@
 from django import forms
-from .models import *
+from .models import (
+    Propriete, Location, Facture, Document, Intervention,
+    TypePropriete, TypeDocument,
+)
+
+
+class ProprieteForm(forms.ModelForm):
+    """Formulaire création/édition propriété (propriétaire défini dans la vue)."""
+    class Meta:
+        model = Propriete
+        fields = [
+            'type_propriete', 'designation', 'description',
+            'adresse', 'complement_adresse', 'code_postal', 'ville',
+            'nb_etage', 'nb_chambre', 'surface', 'montant',
+            'charges_comprises', 'montant_charges', 'garantie',
+            'photo',
+        ]
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 3}),
+            'type_propriete': forms.Select(choices=TypePropriete.choices),
+        }
+
 
 class PayerFactureForm(forms.Form):
-    montant = forms.DecimalField()
-    # Autres champs requis pour le traitement du paiement
+    montant = forms.DecimalField(min_value=0, decimal_places=2)
+
 
 class DemanderLocationForm(forms.ModelForm):
     class Meta:
         model = Location
-        fields = ['date_fin']
+        fields = ['date_fin', 'message_demande']
         widgets = {
-            'date_fin': forms.DateInput(attrs={'class': 'datepicker'}),
+            'date_fin': forms.DateInput(attrs={'type': 'date'}),
+            'message_demande': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Message optionnel au propriétaire'}),
         }
 
-class AutoriserLocationForm(forms.Form):
-    motif = forms.CharField(max_length=200)
-
-class CreerDocumentForm(forms.ModelForm):
-    class Meta:
-        model = Document
-        fields = ["fichier"]
 
 class TelechargerDocumentForm(forms.ModelForm):
     class Meta:
         model = Document
-        fields = ['titre', 'fichier']
- 
-class ProprieteForm(forms.ModelForm):
+        fields = ['type_document', 'titre', 'fichier']
+        widgets = {
+            'type_document': forms.Select(choices=TypeDocument.choices),
+        }
+
+
+class InterventionForm(forms.ModelForm):
     class Meta:
-        model = Propriete
-        fields = ["nb_etage", "adresse", "ville", "code_postal", "description", "nb_chambre", "surface", "proprietaire",]
+        model = Intervention
+        fields = ['titre', 'description']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 4}),
+        }

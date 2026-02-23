@@ -1,28 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Payer la facture {{ location.utilisateur.username }}</h1>
-    <form method="POST" action="{% url 'payer_facture' %}">
+<div class="container bg-light shadow rounded my-3 p-4">
+    <h1 class="mb-4">{{ title }}</h1>
+    <p class="lead">Bien : {% if location.propriete %}{{ location.propriete.designation }}{% endif %} — Montant attendu : <strong>{{ montant_attendu }} F</strong></p>
+    <form method="POST" action="{% url 'payer_facture' location.id %}">
         {% csrf_token %}
         <div class="row my-3">
-            <div class="col-12 d-flex justify-content-center flex-wrap gap-2">
-                <div class="col my-4">
-                    <div class="form-floating">
-                        <input type="text" value="{{ location.utilisateur.username}}" name="username" class="form-control" disabled><label for="username">Future Proprietaire</label>
-                    </div>
-                </div>
-                <div class="col my-4">
-                    <div class="form-floating">
-                        <input type="text" value="{{ location.propriete.designation }}" name="propriete" class="form-control" disabled><label for="propriete">Propriete</label>
-                    </div>
-                </div>
-                <div class="col my-4">
-                    <div class="form-floating">
-                        <input type="number" name="montant" class="form-control" placeholder="{{ location.propriete.montant }} F"><label for="montant">Montant</label>
-                    </div>
-                </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Locataire</label>
+                <input type="text" value="{% if location.utilisateur %}{{ location.utilisateur.username }}{% endif %}" class="form-control" disabled>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Propriété</label>
+                <input type="text" value="{% if location.propriete %}{{ location.propriete.designation }}{% endif %}" class="form-control" disabled>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label" for="montant">Montant (F)</label>
+                <input type="number" name="montant" id="montant" class="form-control" step="0.01" value="{{ montant_attendu }}" placeholder="{{ montant_attendu }}" required>
             </div>
         </div>
-        <button class="btn btn-success border-right-light" type="submit">Payer</button>
+        <button class="btn btn-success" type="submit">Enregistrer le paiement</button>
+        <a href="{% url 'liste_locations' %}" class="btn btn-outline-secondary">Annuler</a>
     </form>
+</div>
 {% endblock content %}

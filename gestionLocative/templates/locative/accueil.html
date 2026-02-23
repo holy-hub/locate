@@ -2,115 +2,86 @@
 
 {% block body %}
 <header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
-        <div class="col-3">
-            <a class="navbar-brand" href="#"><h1>Ma Boutique</h1></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-
-        <div class="col-6 d-flex justify-content-center collapse navbar-collapse text-center" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'accueil' %}">Accueil</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'connexion' %}">Mes factures</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'connexion' %}">Mes locations</a>
-                </li>
-            </ul>
-        </div>
-        <div class="col-3 nav-item active text-center">
-            <div class="input-group d-flex justify-content-center ms-4">
-                <div class="input-group-text">
-                    <i class="fa fa-registered"></i>
-                </div>
-                <a href="{% url 'connexion' %}" class="btn btn-info text-light">Connexion</a>
+    <nav class="z-3 fixed-top navbar navbar-expand-lg navbar-dark navbar-immobilier px-4">
+        <div class="container-fluid d-flex align-items-center">
+            <a class="navbar-brand" href="{% url 'accueil' %}"><h1 class="mb-0">Solulocate</h1></a>
+            <div class="d-flex" id="navbarSupportedContent">
+                {% if request.user.id %}
+                <a href="{% url 'dashboard' %}" class="btn btn-info mx-2">Dashboard</a>
+                <a href="{% url 'deconnexion' %}" class="btn btn-danger mx-2">Deconnexion</a>
+                {% else %}
+                <a href="{% url 'connexion' %}" class="btn btn-gold">Connexion</a>
+                {% endif %}
             </div>
         </div>
-    </nav>    
+    </nav>
 </header>
-<div class="container rounded bg-light my-4">
-    <div class="row">
-        <div class="letter-spacing">
-            <h1 class="text-center mb-2">{{ title|upper }}</h1>
-        </div>
+
+<div class="mt-5 py-3 overflow-hidden">
+    <div class="container main-container rounded my-4 p-4">
+        <h1 class="text-center page-title mb-2">{{ title|upper }}</h1>
+        <form method="get" action="{% url 'accueil' %}" class="row g-3 mb-4 p-3 bg-light rounded">
+            <div class="col-md-3">
+                <label for="ville" class="form-label">Ville</label>
+                <input type="text" name="ville" id="ville" class="form-control" value="{{ filtres.ville }}" placeholder="Filtrer par ville">
+            </div>
+            <div class="col-md-2">
+                <label for="type" class="form-label">Type</label>
+                <select name="type" id="type" class="form-select">
+                    <option value="">Tous</option>
+                    <option value="APP" {% if filtres.type == 'APP' %}selected{% endif %}>Appartement</option>
+                    <option value="MAI" {% if filtres.type == 'MAI' %}selected{% endif %}>Maison</option>
+                    <option value="STU" {% if filtres.type == 'STU' %}selected{% endif %}>Studio</option>
+                    <option value="LOC" {% if filtres.type == 'LOC' %}selected{% endif %}>Local commercial</option>
+                    <option value="AUT" {% if filtres.type == 'AUT' %}selected{% endif %}>Autre</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="prix_min" class="form-label">Prix min (F)</label>
+                <input type="number" name="prix_min" id="prix_min" class="form-control" value="{{ filtres.prix_min }}" placeholder="Min">
+            </div>
+            <div class="col-md-2">
+                <label for="prix_max" class="form-label">Prix max (F)</label>
+                <input type="number" name="prix_max" id="prix_max" class="form-control" value="{{ filtres.prix_max }}" placeholder="Max">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-immobilier">Filtrer</button>
+            </div>
+        </form>
     </div>
-</div>
-<div class="container rounded bg-light my-4">
-    <div class="row">
-        <h1 class="text-center">PROPRIETE DISPONIBLE</h1>
+    <div class="container rounded mt-4 p-4 section-fade">
+        <h2 class="text-center page-title mb-4">Propriétés disponibles</h2>
         <div class="row d-flex flex-wrap">
             {% for prop in proprietes %}
-            <div class="col-lg-4 col-md-6 col-sm-12 my-3">
-                <div class="card shadow h-100">
-                    <div class="card-header bg-dark text-center text-warning"><a href="{% url 'update_propriete' prop.id %}" class="nav-link"><h3>{{ prop.designation|upper }}</h3></a></div>
-                    <div class="card-body bg-info">
-                        <div class="card-title"><b>Proprietaire:</b> {{ prop.proprietaire.username }} - {{ user.last_name }}</div>
-                        <p class="card-text">
-                            <ul class="list-group list-group-flush rounded">
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="w-50"><b>Nombre d'etage:</b></div><div class="w-50">{{ prop.nb_etage }}</div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="w-50"><b>Adresse:</b></div><div class="w-50">{{ prop.adresse }}</div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="w-50"><b>ville:</b></div><div class="w-50">{{ prop.ville }}</div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="w-50"><b>Code Postal:</b></div><div class="w-50">{{ prop.code_postal }}</div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="w-50"><b>Description:</b></div><div class="w-50">{{ prop.description }}</div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="w-50"><b>Nombre de Chambre:</b></div><div class="w-50">{{ prop.nb_chambre }}</div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="w-50"><b>Surface:</b></div><div class="w-50">{{ prop.surface }}Km<sup>2</sup></div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="w-50"><b>Montant:</b></div><div class="w-50">{{ prop.montant }}F</div>
-                                    </div>
-                                </li>
-                                {% if prop.locataire %}
-                                <li class="list-group-item list-group-item-action">
-                                    <div class="d-flex flex-wrap">
-                                        <div class="w-50"><b>Locataire:</b></div><div class="w-50">{{ prop.locataire.username }}F</div>
-                                    </div>
-                                </li>
-                                {% endif %}
-                            </ul>
-                        </p>
-                        <div class="card-footer text-center">
-                            <div class="row col-12 m-auto"><a href="{% url 'demander_location' prop.id %}" class="btn btn-primary"> faire un demande de location</a></div>
+            <div class="col-lg-4 col-md-6 col-sm-12 my-3 fade-in stagger-{{ forloop.counter }}">
+                <div class="card card-immobilier shadow h-100 border-success">
+                    <div class="card-header text-center">
+                        <a href="{% url 'demander_location' prop.id %}" class="nav-link text-dark">
+                            <h3 class="h5 mb-0">{{ prop.designation|upper }}</h3>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-title"><b>Type :</b> {{ prop.get_type_propriete_display }}</p>
+                        {% if prop.proprietaire %}<p class="card-title"><b>Propriétaire :</b> {{ prop.proprietaire.username }}</p>{% endif %}
+                        <ul class="list-group list-group-flush rounded">
+                            <li class="list-group-item list-group-item-action"><b>Adresse :</b> {{ prop.adresse }}, {{ prop.code_postal }} {{ prop.ville }}</li>
+                            {% if prop.nb_etage %}<li class="list-group-item list-group-item-action"><b>Étage :</b> {{ prop.nb_etage }}</li>{% endif %}
+                            <li class="list-group-item list-group-item-action"><b>Chambres :</b> {{ prop.nb_chambre }}</li>
+                            <li class="list-group-item list-group-item-action"><b>Surface :</b> {{ prop.surface }} m²</li>
+                            <li class="list-group-item list-group-item-action"><b>Loyer :</b> {{ prop.loyer_total }} F / mois</li>
+                            {% if prop.description %}<li class="list-group-item list-group-item-action"><b>Description :</b> {{ prop.description|truncatewords:15 }}</li>{% endif %}
+                        </ul>
+                        {% if request.user.id != prop.proprietaire.id %}
+                        <div class="card-footer text-center mt-2">
+                            <a href="{% url 'demander_location' prop.id %}" class="btn btn-immobilier">Demander une location</a>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
             {% empty %}
-            <div class="row col text-center bg-light rounded-pill  m-2 p-2" style="font-family: courrier new;">
-                <p class="pt-2">--- Aucune propriete disponible ! ---</p>
+            <div class="col-12 text-center alert alert-light rounded-3 m-2 p-4">
+                <p class="pt-2 mb-0">Aucune propriété disponible pour le moment.</p>
             </div>
             {% endfor %}
         </div>

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container bg-light shadow rounded my-3 p-4">
+    <h1 class="mb-4">{{ title }}</h1>
+
+    <h2 class="h5 mt-4">Demandes que j'ai créées</h2>
+    <ul class="list-group list-group-flush">
+        {% for i in interventions_loc %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <strong>{{ i.titre }}</strong> — {{ i.propriete.designation }}
+                <br><small class="text-muted">{{ i.date_creation|date:"d/m/Y H:i" }} — {{ i.get_statut_display }}</small>
+            </div>
+            <span class="badge bg-secondary">{{ i.get_statut_display }}</span>
+        </li>
+        {% empty %}
+        <li class="list-group-item">Aucune demande.</li>
+        {% endfor %}
+    </ul>
+
+    <h2 class="h5 mt-4">Demandes sur mes propriétés</h2>
+    <ul class="list-group list-group-flush">
+        {% for i in interventions_proprio %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <strong>{{ i.titre }}</strong> — {{ i.propriete.designation }}
+                <br><small class="text-muted">Par {{ i.demandeur.username }} — {{ i.date_creation|date:"d/m/Y" }}</small>
+            </div>
+            <div>
+                <span class="badge bg-secondary me-2">{{ i.get_statut_display }}</span>
+                <form method="post" action="{% url 'modifier_statut_intervention' i.id %}" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="statut" value="COU">
+                    <button type="submit" class="btn btn-sm btn-outline-primary">En cours</button>
+                </form>
+                <form method="post" action="{% url 'modifier_statut_intervention' i.id %}" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="statut" value="CLO">
+                    <button type="submit" class="btn btn-sm btn-outline-success">Clôturer</button>
+                </form>
+            </div>
+        </li>
+        {% empty %}
+        <li class="list-group-item">Aucune demande sur vos biens.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock content %}

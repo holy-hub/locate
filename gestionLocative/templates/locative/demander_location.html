@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container bg-light rounded">
-        <div class="row my-4 p-2 rounded-pill border border-2">
+<div class="container bg-light rounded section-fade">
+        <div class="row my-4 p-4 rounded-3 border shadow-sm">
             <form action="{% url 'demander_location' propriete.id %}" method="post">
                 {% csrf_token %}
                 <div class="row">
@@ -32,18 +32,24 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-12 my-3">
-                        <div class="form-floating"><input type="text" value="{{ propriete.surface }}" id="surface" name="surface" class="form-control" disabled><label for="surface">Surface</label></div>
+                        <div class="form-floating"><input type="text" value="{{ propriete.surface }} m² — Loyer {{ propriete.loyer_total }} F/mois" class="form-control" disabled><label>Surface / Loyer</label></div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12 my-3">
-                        <div class="form-floating"><input type="date" id="date_fin" name="date_fin" class="form-control"><label for="date_fin">Echeancier de location</label></div>
+                        <div class="form-floating"><input type="date" id="date_fin" name="date_fin" class="form-control" required><label for="date_fin">Date de fin de location</label></div>
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="col-12">
+                        <label for="message_demande" class="form-label">Message au propriétaire (optionnel)</label>
+                        <textarea name="message_demande" id="message_demande" class="form-control" rows="3" placeholder="Présentez-vous ou précisez votre demande..."></textarea>
                     </div>
                 </div>
                 <div class="row d-flex justify-content-around my-4">
                     <div class="row col-5">
-                        <button class="btn btn-success" type="submit">Soumettre</button>
+                        <button class="btn btn-immobilier" type="submit">Soumettre</button>
                     </div>
-                    <div class="row col-5 text-light">
-                        <a href="{% url 'read_user_properties' %}" class="btn btn-info">Mes locations</a>
+                    <div class="row col-5">
+                        <a href="{% url 'liste_locations' %}" class="btn btn-gold">Mes locations</a>
                     </div>
                 </div>
             </form>

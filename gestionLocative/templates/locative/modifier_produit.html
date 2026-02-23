@@ -1,15 +1,93 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container shadow bg-light">
+<div class="container bg-light shadow rounded">
     <div class="row">
-        <div class="col">
-            <form action="{% url 'update_propriete' propriete.id %}" method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" value="Modifier la propriété" class="btn btn-success m-3">
-            </form>
-        </div>
+        <form action="{% url 'update_propriete' propriete.id %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row my-4">
+                <div class="col-lg-4 col-md-6 my-3 col-sm-12">
+                    <div class="form-floating">
+                        <input type="text" value="{{ propriete.nb_etage }}" name="nb_etage" id="nb_etage" class="form-control" placeholder="Home"><label for="nb_etage">Étage / Nombre d'étages</label>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 my-3 col-sm-12">
+                    <div class="form-floating">
+                        <input type="text" value="{{ propriete.designation }}" name="designation" id="designation" class="form-control" placeholder="Home"><label for="designation">Désignation</label>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12 my-3">
+                    <div class="form-floating">
+                        <input type="text" value="{{ propriete.adresse }}" name="adresse" id="adresse" class="form-control" placeholder="Home"><label for="adresse">Adresse</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-floating">
+                    <input type="text" value="{{ propriete.ville }}" name="ville" id="ville" class="form-control" placeholder="Home"><label for="ville">Ville</label>
+                </div>
+            </div>
+            <div class="row my-4">
+                <div class="col-lg-4 my-3 col-md-12 col-sm-12">
+                    <div class="form-floating">
+                        <input type="text" value="{{ propriete.code_postal }}" name="code_postal" id="code_postal" class="form-control" placeholder="Home"><label for="code_postal">Code Postal</label>
+                    </div>
+                </div>
+                <div class="col-lg-4 my-3 col-md-6 col-sm-12">
+                    <div class="form-floating">
+                        <input type="text" value="{{ propriete.description }}" name="description" id="description" class="form-control" placeholder="Home"><label for="description">Description</label>
+                    </div>
+                </div>
+                <div class="col-lg-4 my-3 col-md-6 col-sm-12">
+                    <div class="form-floating">
+                        <input type="number" value="{{ propriete.nb_chambre }}" name="nb_chambre" id="nb_chambre" class="form-control" placeholder="Home"><label for="nb_chambre">Nombre de Chambres</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 my-3">
+                    <label for="type_propriete" class="form-label">Type de propriété</label>
+                    <select name="type_propriete" id="type_propriete" class="form-select">
+                        {% for value, label in type_propriete_choices %}
+                        <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6 my-3">
+                    <label for="statut_propriete" class="form-label">Statut de propriété</label>
+                    <select name="statut_propriete" id="statut_propriete" class="form-select">
+                        {% for value, label in statut_propriete_choices %}
+                        <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input type="number" value="{{ propriete.surface }}" name="surface" id="surface" class="form-control" placeholder="0" step="0.01"><label for="surface">Surface (m²)</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input type="number" value="{{ propriete.montant }}" name="montant" id="montant" class="form-control" placeholder="0" step="50"><label for="montant">Loyer (F)</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Photo</label>
+                    <input type="file" name="photo" class="form-control" accept="image/*">
+                    {% if propriete.photo %}<p class="small text-muted">Photo actuelle : <a href="{{ propriete.photo.url }}" target="_blank">Voir</a></p>{% endif %}
+                </div>
+            </div>
+            <div class="row d-flex justify-content-around my-4">
+                <div class="col-auto">
+                    <button class="btn btn-success" type="submit">Modifier la propriété</button>
+                </div>
+                <div class="col-auto">
+                    <a href="{% url 'read_propriete' propriete.id %}" class="btn btn-info">Annuler</a>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock content %}

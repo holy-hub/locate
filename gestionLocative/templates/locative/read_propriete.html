@@ -1,5 +1,46 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<div class="container bg-light shadow rounded my-3 p-4">
+    <h1 class="mb-4">{{ title }}</h1>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card card-immobilier">
+                <div class="card-body">
+                    <p class="card-title"><b>Type :</b> {{ propriete.get_type_propriete_display }} — <b>Statut :</b> {{ propriete.get_statut_display }}</p>
+                    <p class="card-text">{{ propriete.description|default:"—" }}</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>Adresse :</b> {{ propriete.adresse }}{% if propriete.complement_adresse %}, {{ propriete.complement_adresse }}{% endif %}</li>
+                        <li class="list-group-item"><b>Code postal :</b> {{ propriete.code_postal }} — <b>Ville :</b> {{ propriete.ville }}</li>
+                        {% if propriete.nb_etage %}<li class="list-group-item"><b>Étage :</b> {{ propriete.nb_etage }}</li>{% endif %}
+                        <li class="list-group-item"><b>Chambres :</b> {{ propriete.nb_chambre }} — <b>Surface :</b> {{ propriete.surface }} m²</li>
+                        <li class="list-group-item"><b>Loyer :</b> {{ propriete.loyer_total }} F/mois {% if propriete.charges_comprises %}(charges comprises){% endif %}</li>
+                        {% if propriete.garantie %}<li class="list-group-item"><b>Garantie :</b> {{ propriete.garantie }} F</li>{% endif %}
+                        {% if propriete.proprietaire %}<li class="list-group-item"><b>Propriétaire :</b> {{ propriete.proprietaire.username }}</li>{% endif %}
+                        {% if propriete.locataire %}<li class="list-group-item"><b>Locataire :</b> {{ propriete.locataire.username }}</li>{% endif %}
+                    </ul>
+                    {% if propriete.photo %}<img src="{{ propriete.photo.url }}" alt="{{ propriete.designation }}" class="img-fluid rounded mt-3">{% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Actions</h5>
+                    {% if est_proprietaire %}
+                    <p><a href="{% url 'update_propriete' propriete.id %}" class="btn btn-immobilier w-100">Modifier la propriété</a></p>
+                    <p><a href="{% url 'gerer_documents' propriete.id %}" class="btn btn-info w-100">Gérer les documents</a></p>
+                    <p><a href="{% url 'delete_propriete' propriete.id %}" class="btn btn-danger w-100" onclick="return confirm('Supprimer cette propriété ?');">Supprimer</a></p>
+                    {% elif est_locataire %}
+                    <p><a href="{% url 'creer_intervention' propriete.id %}" class="btn btn-warning w-100">Signaler un problème</a></p>
+                    {% elif not propriete.est_loue %}
+                    <p><a href="{% url 'demander_location' propriete.id %}" class="btn btn-immobilier w-100">Demander une location</a></p>
+                    {% endif %}
+                    <p><a href="{% url 'read_user_properties' %}" class="btn btn-outline-secondary w-100">Mes propriétés</a></p>
+                    <p><a href="{% url 'dashboard' %}" class="btn btn-outline-secondary w-100">Tableau de bord</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}

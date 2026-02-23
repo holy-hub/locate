@@ -1,34 +1,55 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container shadow bg-light my-3">
+<div class="container shadow bg-light rounded my-3 p-4">
+    <h1 class="mb-4">{{ title }}</h1>
+    <p class="lead">Propriété : <strong>{{ propriete.designation }}</strong></p>
     <div class="row">
-        <div class="col-12 d-flex align-items-center">
-            <div class="col-6">
-                <h1 class="text-center">Gérer les documents</h1>
-                <ul class="list-group">
-                    {% for document in documents %}
-                        <li class="list-group-item list-group-item-action">{{ document.titre }} - {{ document.fichier }}</li>
-                    {% empty %}
-                        <li class="list-group-item list-group-item-action">Aucun document disponible.</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="col-6">
-                <div class="card">
-                    <form method="POST" enctype="multipart/form-data">
+        <div class="col-lg-6 mb-4">
+            <h2 class="h5">Documents déposés</h2>
+            <ul class="list-group list-group-flush">
+                {% for document in documents %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ document.titre }}</strong> — {{ document.get_type_document_display }}
+                        <br><small class="text-muted">{{ document.date_upload|date:"d/m/Y H:i" }}</small>
+                    </div>
+                    <a href="{{ document.fichier.url }}" class="btn btn-sm btn-outline-primary" target="_blank">Télécharger</a>
+                </li>
+                {% empty %}
+                <li class="list-group-item">Aucun document.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">Ajouter un document</div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'gerer_documents' propriete.id %}" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="col my-3">
-                            <div class="form-floating"><input type="text" name="titre" class="form-control"><label for="titre">Titre</label></div>
+                        <div class="mb-3">
+                            <label for="type_document" class="form-label">Type</label>
+                            <select name="type_document" id="type_document" class="form-select">
+                                <option value="AUT">Autre</option>
+                                <option value="CON">Contrat de location</option>
+                                <option value="IDE">Pièce d'identité</option>
+                                <option value="JUS">Justificatif de domicile</option>
+                            </select>
                         </div>
-                        <div class="col my-3">
-                            <div class="form-floating"><input type="file" name="fichier" class="form-control"><label for="fichier">Fichier</label></div>
+                        <div class="mb-3">
+                            <label for="titre" class="form-label">Titre</label>
+                            <input type="text" name="titre" id="titre" class="form-control" required>
                         </div>
-                        <button class="btn btn-success" type="submit">Télécharger</button>
+                        <div class="mb-3">
+                            <label for="fichier" class="form-label">Fichier</label>
+                            <input type="file" name="fichier" id="fichier" class="form-control" required>
+                        </div>
+                        <button class="btn btn-success" type="submit">Ajouter</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+    <p class="mt-4"><a href="{% url 'read_user_properties' %}" class="btn btn-info">Retour à mes propriétés</a></p>
 </div>
 {% endblock content %}

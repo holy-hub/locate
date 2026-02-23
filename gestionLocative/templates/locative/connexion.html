@@ -1,42 +1,55 @@
 {% extends "link.html" %}
-
 {% load static %}
 
 {% block body %}
-<div class="container rounded bg-light my-4 shadow p-3">
-    <div class="letter-spacing my-4">
-        <h1 class="text-center">{{ title|upper }}</h1>
-    </div>
-    <hr>
-    <div class="row my-4">
-        <div class="col-12 d-flex align-items-center">
-            <div class="col-lg-6 col-md-12 col-sm-12 p-3">
-                <form action="{% url 'connexion' %}" method="post">
-                    {% csrf_token %}
-                    <div class="col mb-4 py-3 px-2 form-group">
-                        <div class="form-floating">
-                            <input type="text" name="username" class="form-control" required><label for="username">Username</label>
-                        </div>
-                    </div>
-                    <div class="col my-4 py-3 px-2 form-group">
-                        <div class="form-floating">
-                            <input type="password" name="password" class="form-control" required><label for="password">Password</label>
-                        </div>
-                    </div>
-                    <div class="col my-4 py-3 px-4 form-group">
-                        <div class="row d-flex justify-content-center gap-4">
-                            <div class="col row my-2">
-                                <button class="btn btn-primary" type="submit">Se connecter</button>
-                            </div>
-                            <div class="col row my-2 text-light">
-                                <a href="{% url 'inscription' %}" class="btn btn-info text-light">S'inscrire</a>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+<header>
+    <nav class="z-3 fixed-top navbar navbar-expand-lg navbar-dark navbar-immobilier px-4">
+        <div class="container-fluid d-flex align-items-center">
+            <a class="navbar-brand" href="{% url 'accueil' %}"><h1 class="mb-0">Solulocate</h1></a>
+
+            <div class="d-flex">
+                <a href="{% url 'connexion' %}" class="btn btn-gold">Connexion</a>
             </div>
-            <div class="col-lg-6 col-md-12 col-sm-12 p-3">
-                <img src="{% static "img/login.png" %}" alt="Se connecter" title="Connexion" class="img img-thumbnail img-rounded"></img>
+        </div>
+    </nav>
+</header>
+
+<div class="justify-align">
+    <div class="container main-container rounded my-4 shadow p-4">
+        <div class="letter-spacing my-3">
+            <h1 class="text-center page-title">{{ title|upper }}</h1>
+        </div>
+        <hr>
+        <div class="row my-4">
+            <div class="col-12 d-flex align-items-center">
+                <div class="col-lg-6 col-md-12 col-sm-12 p-3 fade-in">
+                    <form action="{% url 'connexion' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" method="post">
+                        {% csrf_token %}
+                        <div class="col mb-4 py-3 px-2 form-group">
+                            <div class="form-floating">
+                                <input type="text" name="username" class="form-control" required><label for="username">Username</label>
+                            </div>
+                        </div>
+                        <div class="col my-4 py-3 px-2 form-group">
+                            <div class="form-floating">
+                                <input type="password" name="password" class="form-control" required><label for="password">Password</label>
+                            </div>
+                        </div>
+                        <div class="col my-4 py-3 px-4 form-group">
+                            <div class="row d-flex justify-content-center gap-4">
+                                <div class="col row my-2">
+                                    <button class="btn btn-immobilier" type="submit">Se connecter</button>
+                                </div>
+                                <div class="col row my-2">
+                                    <a href="{% url 'inscription' %}" class="btn btn-gold">S'inscrire</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12 p-3 fade-in stagger-2">
+                    <img src="{% static 'img/login.png' %}" alt="Se connecter" title="Connexion" class="img-fluid img-thumbnail rounded-3">
+                </div>
             </div>
         </div>
     </div>
